@@ -1,2 +1,2 @@
-#!/usr/bin/perl -pF;
-$g=$.;map$g*=15-/r/-/d/>$_,/\d+ \w+/g for@F;$r+=$g}{$_=$r
+#!/usr/bin/perl -p
+$g=$.;map$g*=15-/r/-/d/>$_,/\d+ \w+/g;$r+=$g}{$_=$r
