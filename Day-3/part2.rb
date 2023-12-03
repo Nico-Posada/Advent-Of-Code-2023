@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!ruby
 a=*$<
 t=0
 q=/\d/
