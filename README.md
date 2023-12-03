@@ -15,4 +15,4 @@ You can run each solution by running `./part(1|2).(ext) < input.txt`
 
 **Day 3 Part 1**: 186 bytes
 
-**Day 3 Part 2**: 272 bytes
+**Day 3 Part 2**: 265 bytes
