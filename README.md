@@ -20,3 +20,11 @@ You can run each solution by running `./part(1|2).(ext) < input.txt` in your ter
 **Day 4 Part 1**: 49 bytes
 
 **Day 4 Part 2**: 99 bytes
+
+**Day 5 Part 1**: too lazy to golf
+
+**Day 5 Part 2**: too lazy to golf
+
+**Day 6 Part 1**: too lazy to golf
+
+**Day 6 Part 2**: 65 bytes
