@@ -31,4 +31,4 @@ You can run each solution by running `./part(1|2).(ext) < input.txt` in your ter
 
 **Day 7 Part 1**: 125 bytes
 
-**Day 7 Part 2**: 170 bytes
+**Day 7 Part 2**: 165 bytes
