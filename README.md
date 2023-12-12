@@ -32,3 +32,5 @@ You can run each solution by running `./part(1|2).(ext) < input.txt` in your ter
 **Day 7 Part 1**: 125 bytes
 
 **Day 7 Part 2**: 165 bytes
+
+__**From here, the solutions get more optimization based, so I likely won't be golfing these unless it's an easy prompt**__
