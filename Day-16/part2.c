@@ -32,60 +32,42 @@ int get_col_count(char* data)
     return total;
 }
 
-int count_energized(bool* energized, int rows, int cols)
-{
-    int total = 0;
-    // because we used packed data, gonna have to get creative
-    for (unsigned int xy = 0; xy <= 0b11111111111111; ++xy) {
-        for (unsigned char dir = 0; dir <= 0b11; ++dir ) {
-            unsigned short packed = dir | (xy << 2);
-            if (energized[packed]) {
-                total++;
-                break;
-            }
-        }
-    }
-
-    return total;
-}
-
 int get_energized_count(char** grid, bool* energized, int rows, int cols, int start_x, int start_y, int start_dir) {
     memset(energized, 0, USHRT_MAX);
 
-    int size = 1;
+    int size = 1, count = 0;
     Ray* rays = (Ray*)calloc(size, sizeof(Ray));
     rays->x = start_x;
     rays->y = start_y;
     rays->dir = start_dir;
 
-    Ray* new_rays = NULL;
-    int total_repeat = 0;
-
     while (size > 0) {
-        int prev_count = count_energized(energized, rows, cols);
-
         int new_size = 0;
-        new_rays = (Ray*)calloc(size * 2, sizeof(Ray));
+        Ray* new_rays = (Ray*)calloc(size * 2, sizeof(Ray));
+
         for (int i = 0; i < size; ++i) {
             Ray* cur = &rays[i];
             int x = cur->x, y = cur->y, dir = cur->dir;
             if (x<0 || x>=cols || y<0 || y>=rows)
                 continue;
 
-            unsigned short packed = dir | ((unsigned int)x << 2) | ((unsigned int)y << 9);
-            if (energized[packed]) {
-                //printf("found already energized: %u\n", packed);
+            unsigned short pos = x | y << 7;
+            unsigned short packed = dir | pos << 2;
+            if (energized[packed])
                 continue;
-            }
 
+            int* casted = (int*)energized;
+            if (casted[pos] == 0)
+                count++;
+            
             energized[packed] = true;
             char c = grid[y][x];
 
             if (c == '/') {
-                dir = dir == 0 ? 3 : dir == 1 ? 2 : dir == 2 ? 1 : 0;
+                dir = 3 - dir;
             }
             else if (c == '\\') {
-                dir = dir == 0 ? 1 : dir == 1 ? 0 : dir == 2 ? 3 : 2;
+                dir ^= 1;
             }
             else if (c == '-') {
                 if (dir == 1 || dir == 3) {
@@ -138,7 +120,7 @@ int get_energized_count(char** grid, bool* energized, int rows, int cols, int st
     }
 
     free(rays);
-    return count_energized(energized, rows, cols);
+    return count;
 }
 
 int main(int argc, char** argv)
@@ -149,7 +131,7 @@ int main(int argc, char** argv)
     }
 
     char *filename = argv[1];
-    FILE *fp = fopen(filename, "r");
+    FILE *fp = fopen(filename, "rb");
 
     if (fp == NULL) {
         printf("Error: could not open file %s", filename);
@@ -165,11 +147,10 @@ int main(int argc, char** argv)
     int rows = get_row_count(grid_str), cols = get_col_count(grid_str);
     char** grid = (char**)calloc(rows, sizeof(char*));
 
-    // packed energy bits (MSB first):
+    // packed energy bits (MSB):
     // y       x       dir
     // 0000000 0000000 00
     bool* energized = (bool*)calloc(USHRT_MAX, sizeof(bool));
-
 
     // init grid
     char* tok = strtok(grid_str, "\n");
